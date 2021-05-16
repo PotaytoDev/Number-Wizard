@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class NumberWizard : MonoBehaviour
 {
-    // Declare and initialize variables
-    int maxNumberRange = 1000;
-    int minNumberRange = 1;
-    int guess = 500;
+    // Declare variables
+    int maxNumberRange;
+    int minNumberRange;
+    int guess;
+    bool isGameOver;
 
     // Start is called before the first frame update
     void Start()
     {
+        StartGame();
+    }
+
+    void StartGame()
+    {
+        // Initialize variables
+        maxNumberRange = 1000;
+        minNumberRange = 1;
+        guess = 500;
+
         Debug.Log("Welcome to Number Wizard!");
         Debug.Log("In this game, I will guess the number you are thinking of from a given range.");
         Debug.Log("First, pick a number from " + minNumberRange + " to " + maxNumberRange + ".");
@@ -25,24 +36,37 @@ public class NumberWizard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // This means that the number is higher than the guess
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        // 
+        if (!isGameOver)
         {
-            minNumberRange = guess;
-            guess = (maxNumberRange + minNumberRange) / 2;
-            Debug.Log("My guess is " + guess + ". Is your number higher. lower, or is my guess correct?");
-            Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                minNumberRange = guess;
+                NextGuess();
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                maxNumberRange = guess;
+                NextGuess();
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Debug.Log("I win :3" + "\nPress Space if you want to play again.");
+                isGameOver = true;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGameOver)
         {
-            maxNumberRange = guess;
-            guess = (maxNumberRange + minNumberRange) / 2;
-            Debug.Log("My guess is " + guess + ". Is your number higher, lower, or is my guess correct?");
-            Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
+            StartGame();
+            isGameOver = false;
         }
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            Debug.Log("The number you picked is: " + guess);
-        }
+    }
+
+    void NextGuess()
+    {
+        guess = (maxNumberRange + minNumberRange) / 2;
+        Debug.Log("My guess is " + guess + ". Is your number higher, lower, or is my guess correct?");
+        Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
     }
 }
