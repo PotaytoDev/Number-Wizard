@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class NumberWizard : MonoBehaviour
 {
+    // Declare and initialize variables
+    int maxNumberRange = 1000;
+    int minNumberRange = 1;
+    int guess = 500;
+
     // Start is called before the first frame update
     void Start()
     {
-        int maxNumberRange = 1000;
-        int minNumberRange = 1;
-
         Debug.Log("Welcome to Number Wizard!");
         Debug.Log("In this game, I will guess the number you are thinking of from a given range.");
-        Debug.Log("Pick a number from " + minNumberRange + " to " + maxNumberRange + ": ");
-        Debug.Log("Tell me if your number is lower or higher than 500");
-        Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter/Return (Correct guess)");
+        Debug.Log("First, pick a number from " + minNumberRange + " to " + maxNumberRange + ".");
+        Debug.Log("Now, tell me if your number is lower or higher than " + guess);
+        Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
+        // Need to make it 1001 because on the edge case where it's higher than 999, the result of the
+        // calculation will give 999.5, which truncated into an integer is still 999. This will avoid that and give 1000.
+        maxNumberRange += 1;
     }
 
     // Update is called once per frame
@@ -23,15 +28,21 @@ public class NumberWizard : MonoBehaviour
         // This means that the number is higher than the guess
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            Debug.Log("Up Arrow key was pressed.");
+            minNumberRange = guess;
+            guess = (maxNumberRange + minNumberRange) / 2;
+            Debug.Log("My guess is " + guess + ". Is your number higher. lower, or is my guess correct?");
+            Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            Debug.Log("Down arrow key was pressed.");
+            maxNumberRange = guess;
+            guess = (maxNumberRange + minNumberRange) / 2;
+            Debug.Log("My guess is " + guess + ". Is your number higher, lower, or is my guess correct?");
+            Debug.Log("Press Up Arrow (Higher), Down Arrow (Lower), or Enter (Correct guess)");
         }
-        if (Input.GetKeyDown(KeyCode.Return))
+        else if (Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log("Return/Enter key was pressed.");
+            Debug.Log("The number you picked is: " + guess);
         }
     }
 }
